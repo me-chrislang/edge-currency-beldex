@@ -46,6 +46,7 @@
     "buffer": "^5.0.6",
     "jsonschema": "^1.1.1",
     "mymonero-core-js": "git://github.com/EdgeApp/mymonero-core-js.git#matthew/txPrivateKey",
+    "mymonero-core-js-bdx":"git://github.com/me-chrislang/mymonero-core-js.git#matthew/txPrivateKey",
     "uri-js": "^3.0.2"
   },
   "devDependencies": {
@@ -78,7 +79,7 @@
     "webpack-cli": "^3.2.3"
   },
   "peerDependencies": {
-    "react-native-mymonero-core": "^0.1.0"
+    "native-beldex-core": "^0.1.0"
   },
   "react-native": "./lib/xmrIndex.js"
 }

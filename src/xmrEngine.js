@@ -25,7 +25,7 @@ import {
 import type {
   QueryParams,
   SendFundsParams
-} from 'mymonero-core-js/lib/myMoneroApi.js'
+} from 'mymonero-core-js-bdx/lib/myMoneroApi.js'
 
 import {
   cleanResultLogs,
