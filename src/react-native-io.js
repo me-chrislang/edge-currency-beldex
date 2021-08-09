@@ -1,4 +1,4 @@
-import { callMyMonero } from 'react-native-mymonero-core'
+import { callMyMonero } from 'native-beldex-core'
 
 export default function makeCustomIo() {
   return { callMyMonero }
