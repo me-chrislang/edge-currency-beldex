@@ -1,17 +1,14 @@
 {
-  "name": "edge-currency-monero",
-  "version": "0.3.2",
+  "name": "edge-currency-test",
+  "version": "0.1.0",
   "description": "Edge Monero currency plugin",
   "homepage": "https://edge.app",
   "repository": {
     "type": "git",
-    "url": "git@github.com:EdgeApp/edge-currency-monero.git"
+    "url": "git@github.com:me-chrislang/edge-currency-monero.git"
   },
-  "license": "SEE LICENSE IN LICENSE",
-  "author": "Edge (Airbitz, Inc)",
-  "contributors": [
-    "Paul Puey <paul@edge.app>"
-  ],
+  "license": "MIT",
+  "author": "Chris Lang",
   "main": "./index.js",
   "module": "./lib/xmrIndex.js",
   "files": [
