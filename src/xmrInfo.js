@@ -14,24 +14,24 @@ const defaultSettings: any = {
 
 export const currencyInfo: EdgeCurrencyInfo = {
   // Basic currency information:
-  currencyCode: 'XMR',
-  displayName: 'Monero',
-  pluginId: 'monero',
+  currencyCode: 'BDX',
+  displayName: 'Beldex',
+  pluginId: 'beldex',
   requiredConfirmations: 10,
-  walletType: 'wallet:monero',
+  walletType: 'wallet:beldex',
 
   defaultSettings,
 
-  addressExplorer: 'https://xmrchain.net/search?value=%s',
+  addressExplorer: 'https://explorer.beldex.io/search?value=%s',
   transactionExplorer:
-    'https://blockchair.com/monero/transaction/%s?from=edgeapp',
+    'https://explorer.beldex.io/search?value=%s',
 
   denominations: [
     // An array of Objects of the possible denominations for this currency
     {
-      name: 'XMR',
+      name: 'BDX',
       multiplier: '1000000000000',
-      symbol: '‎ɱ'
+      symbol: 'bdx'
     }
   ],
   metaTokens: []
