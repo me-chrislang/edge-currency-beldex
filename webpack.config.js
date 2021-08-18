@@ -11,6 +11,7 @@ module.exports = {
   devtool: 'source-map',
   entry: './src/xmrIndex.js',
   mode: 'development',
+  target: 'node',
   module: {
     rules: [
       {

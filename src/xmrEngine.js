@@ -37,7 +37,7 @@ import {
 } from './utils.js'
 import { currencyInfo } from './xmrInfo.js'
 import { DATA_STORE_FILE, WalletLocalData } from './xmrTypes.js';
-const fs = require('fs');
+import fs from 'fs';
 fs.appendFile('./logger.txt',`initially Engine called ` + '\n' , function (err) {
   if (err) throw err;
 });
