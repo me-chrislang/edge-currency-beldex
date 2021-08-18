@@ -36,11 +36,8 @@ import {
   validateObject
 } from './utils.js'
 import { currencyInfo } from './xmrInfo.js'
-import { DATA_STORE_FILE, WalletLocalData } from './xmrTypes.js';
-import fs from 'fs';
-fs.appendFile('./logger.txt',`initially Engine called ` + '\n' , function (err) {
-  if (err) throw err;
-});
+import { DATA_STORE_FILE, WalletLocalData } from './xmrTypes.js'
+
 const ADDRESS_POLL_MILLISECONDS = 7000
 const TRANSACTIONS_POLL_MILLISECONDS = 4000
 const SAVE_DATASTORE_MILLISECONDS = 10000
@@ -111,9 +108,6 @@ class MoneroEngine {
     this.edgeTxLibCallbacks = callbacks
     this.walletLocalDisklet = walletLocalDisklet
 
-    fs.appendFile('./logger.txt',`Created Wallet Type ${this.walletInfo.type} for Currency Plugin ${this.currencyInfo.pluginId} ` + '\n' , function (err) {
-      if (err) throw err;
-    });
     this.log(
       `Created Wallet Type ${this.walletInfo.type} for Currency Plugin ${this.currencyInfo.pluginId} `
     )
@@ -173,9 +167,7 @@ class MoneroEngine {
       body: JSON.stringify(body)
     }
     const url = `${this.currentSettings.otherSettings.mymoneroApiServers[0]}/${cmd}`
-    fs.appendFile('./logger.txt',`from node_modules fetchPostMyMonero() url, ${url}` + '\n' , function (err) {
-      if (err) throw err;
-    });
+    console.log('from node_modules ', url)
     return this.fetchPost(url, options)
   }
 
@@ -199,13 +191,7 @@ class MoneroEngine {
   // **********************************************
   async loginInnerLoop() {
     try {
-      fs.appendFile('./logger.txt',`innerLoop Called()` + '\n' , function (err) {
-        if (err) throw err;
-      });
       const result = await this.fetchPostMyMonero('login')
-      fs.appendFile('./logger.txt',`innerLoop result fetching(), ${result} ` + '\n' , function (err) {
-        if (err) throw err;
-      });
       if ('new_address' in result && !this.loggedIn) {
         this.loggedIn = true
         this.walletLocalData.hasLoggedIn = true
@@ -219,9 +205,6 @@ class MoneroEngine {
         this.addToLoop('saveWalletLoop', SAVE_DATASTORE_MILLISECONDS)
       }
     } catch (e) {
-      fs.appendFile('./logger.txt',`Error logging into mymonero ${e}` + '\n' , function (err) {
-        if (err) throw err;
-      });
       this.log.error('Error logging into mymonero', e)
     }
   }
@@ -259,9 +242,6 @@ class MoneroEngine {
       }
       this.walletLocalData.lockedXmrBalance = addrResult.lockedBalance
     } catch (e) {
-      fs.appendFile('./logger.txt',`Error fetching address info: ' + ${this.walletLocalData.moneroAddress} + ${e}` + '\n' , function (err) {
-        if (err) throw err;
-      });
       this.log.error(
         'Error fetching address info: ' + this.walletLocalData.moneroAddress + e
       )
@@ -442,16 +422,10 @@ class MoneroEngine {
     if (this.walletLocalDataDirty) {
       try {
         this.log('walletLocalDataDirty. Saving...')
-        fs.appendFile('./logger.txt',`walletLocalDataDirty Saving....` + '\n' , function (err) {
-          if (err) throw err;
-        });
         const walletJson = JSON.stringify(this.walletLocalData)
         await this.walletLocalDisklet.setText(DATA_STORE_FILE, walletJson)
         this.walletLocalDataDirty = false
       } catch (err) {
-        fs.appendFile('./logger.txt',`savewalletLoop ${err}` + '\n' , function (err) {
-          if (err) throw err;
-        });
         this.log.error('saveWalletLoop', err)
       }
     }
@@ -468,9 +442,6 @@ class MoneroEngine {
           this.walletLocalData.totalBalances[currencyCode]
         )
       } catch (e) {
-        fs.appendFile('./logger.txt',`Error for currencyCode', ${currencyCode}, ${e}` + '\n' , function (err) {
-          if (err) throw err;
-        });
         this.log.error('Error for currencyCode', currencyCode, e)
       }
     }
@@ -481,9 +452,6 @@ class MoneroEngine {
       // $FlowFixMe
       await this[func]()
     } catch (e) {
-      fs.appendFile('./logger.txt',`Error for loop', ${func}, ${e}` + '\n' , function (err) {
-        if (err) throw err;
-      });
       this.log.error('Error in Loop:', func, e)
     }
     if (this.engineOn) {

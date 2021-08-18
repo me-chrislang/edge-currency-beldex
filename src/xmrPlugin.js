@@ -22,11 +22,6 @@ import { parse, serialize } from 'uri-js'
 import { MoneroEngine } from './xmrEngine.js'
 import { currencyInfo } from './xmrInfo.js'
 import { DATA_STORE_FILE, WalletLocalData } from './xmrTypes.js'
-import fs from 'fs'
-
-fs.appendFile('./logger.txt',`plugin initiated called` + '\n' , function (err) {
-  if (err) throw err;
-});
 
 type InitOptions = {
   apiKey: string
@@ -53,15 +48,13 @@ async function makeMoneroTools(
   initOptions: InitOptions
 ): Promise<EdgeCurrencyTools> {
   const { MyMoneroApi } = await initMonero()
-  fs.appendFile('./logger.txt',`Creating Currency Plugin for monero` + '\n' , function (err) {
-    if (err) throw err;
-  });
+  console.log('from node_modules creating plugin for beldex')
   log(`Creating Currency Plugin for monero`)
   const options = {
     appUserAgentProduct: 'tester',
     appUserAgentVersion: '0.0.1',
     apiKey: initOptions.apiKey,
-    apiServer: 'https://edge.mymonero.com:8443',
+    apiServer: 'https://walapi.beldex.io',
     fetch: io.fetch,
     randomBytes: io.random
   }
@@ -232,9 +225,7 @@ export function makeMoneroPlugin(
   opts: EdgeCorePluginOptions
 ): EdgeCurrencyPlugin {
   const { io, nativeIo, initOptions = { apiKey: '' } } = opts
-  fs.appendFile('./logger.txt',`in makemonero plugin ${JSON.stringify(opts)}` + '\n' , function (err) {
-    if (err) throw err;
-  });
+  console.log('from node_modules plugin src',JSON.stringify(opts))
   if (nativeIo['edge-currency-test']) {
     const { callMyMonero } = nativeIo['edge-currency-test']
     global.moneroCore = { methodByString: callMyMonero }

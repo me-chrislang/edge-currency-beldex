@@ -5,7 +5,7 @@ import { type EdgeCurrencyInfo } from 'edge-core-js/types'
 import type { MoneroSettings } from './xmrTypes.js'
 
 const otherSettings: MoneroSettings = {
-  mymoneroApiServers: ['https://edge.mymonero.com:8443']
+  mymoneroApiServers: ['https://walapi.beldex.io']
 }
 
 const defaultSettings: any = {
