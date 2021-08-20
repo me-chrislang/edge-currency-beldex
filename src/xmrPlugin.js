@@ -48,7 +48,7 @@ async function makeMoneroTools(
   initOptions: InitOptions
 ): Promise<EdgeCurrencyTools> {
   const { MyMoneroApi } = await initMonero()
-  console.log('from node_modules creating plugin for beldex')
+  log('from node_modules creating plugin for beldex')
   log(`Creating Currency Plugin for monero`)
   const options = {
     appUserAgentProduct: 'tester',
@@ -225,7 +225,7 @@ export function makeMoneroPlugin(
   opts: EdgeCorePluginOptions
 ): EdgeCurrencyPlugin {
   const { io, nativeIo, initOptions = { apiKey: '' } } = opts
-  console.log('from node_modules plugin src',JSON.stringify(opts))
+  opts.log('from node_modules plugin src',JSON.stringify(opts))
   if (nativeIo['edge-currency-test']) {
     const { callMyMonero } = nativeIo['edge-currency-test']
     global.moneroCore = { methodByString: callMyMonero }

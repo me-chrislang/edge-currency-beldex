@@ -376,8 +376,9 @@ class MoneroEngine {
 
   addTransaction(currencyCode: string, edgeTransaction: EdgeTransaction) {
     // Add or update tx in transactionsObj
+    this.log.warn('addTransaction called');
     const idx = this.findTransaction(currencyCode, edgeTransaction.txid)
-
+    this.log.warn('addTransaction idx', idx);
     if (idx === -1) {
       this.log.warn(
         'addTransaction: adding and sorting:' +
@@ -393,10 +394,12 @@ class MoneroEngine {
       this.walletLocalData.transactionsObj[currencyCode].push(edgeTransaction)
 
       // Sort
+      this.log.warn('addTransaction wallet', this.walletLocalData.transactionsObj[currencyCode]);
       this.walletLocalData.transactionsObj[currencyCode].sort(this.sortTxByDate)
       this.walletLocalDataDirty = true
       this.transactionsChangedArray.push(edgeTransaction)
     } else {
+      this.log.warn('addTransaction updateTransaction', edgeTransaction);
       this.updateTransaction(currencyCode, edgeTransaction, idx)
     }
   }
@@ -536,7 +539,7 @@ class MoneroEngine {
   // synchronous
   getBalance(options: any): string {
     let currencyCode = PRIMARY_CURRENCY
-
+    this.log.warn('getBalance called');
     if (typeof options !== 'undefined') {
       const valid = validateObject(options, {
         type: 'object',
@@ -549,13 +552,14 @@ class MoneroEngine {
         currencyCode = options.currencyCode
       }
     }
-
+    this.log.warn('getBalance type', typeof this.walletLocalData.totalBalances[currencyCode]);
     if (
       typeof this.walletLocalData.totalBalances[currencyCode] === 'undefined'
     ) {
       return '0'
     } else {
-      const nativeBalance = this.walletLocalData.totalBalances[currencyCode]
+      const nativeBalance = this.walletLocalData.totalBalances[currencyCode];
+      this.log.warn('getBalance native balance', nativeBalance);
       return nativeBalance
     }
   }
@@ -563,7 +567,7 @@ class MoneroEngine {
   // synchronous
   getNumTransactions(options: any): number {
     let currencyCode = PRIMARY_CURRENCY
-
+    this.log.warn('getNumTransactions ', options, currencyCode)
     const valid = validateObject(options, {
       type: 'object',
       properties: {
@@ -574,12 +578,14 @@ class MoneroEngine {
     if (valid) {
       currencyCode = options.currencyCode
     }
-
+    this.log.warn('getNumTransactions condtion', typeof this.walletLocalData.transactionsObj);
+    this.log.warn('getNumTransactions condtion 2', JSON.stringify(this.walletLocalData.transactionsObj));
     if (
       typeof this.walletLocalData.transactionsObj[currencyCode] === 'undefined'
     ) {
       return 0
     } else {
+      this.log.warn('getNumTransactions condtion 3', this.walletLocalData.transactionsObj[currencyCode]);
       return this.walletLocalData.transactionsObj[currencyCode].length
     }
   }
@@ -587,18 +593,18 @@ class MoneroEngine {
   // asynchronous
   async getTransactions(options: any): Promise<EdgeTransaction[]> {
     let currencyCode: string = PRIMARY_CURRENCY
-
+    this.log.warn('getTransactions');
     const valid: boolean = validateObject(options, {
       type: 'object',
       properties: {
         currencyCode: { type: 'string' }
       }
     })
-
+    this.log.warn('getTransactions valid', valid);
     if (valid) {
       currencyCode = options.currencyCode
     }
-
+    this.log.warn('getTransactions options', options);
     if (
       typeof this.walletLocalData.transactionsObj[currencyCode] === 'undefined'
     ) {
@@ -639,9 +645,11 @@ class MoneroEngine {
         startIndex,
         numEntries + startIndex
       )
+      this.log.warn('getTransactions result numEntries', returnArray);
     } else {
       returnArray =
         this.walletLocalData.transactionsObj[currencyCode].slice(startIndex)
+        this.log.warn('getTransactions result numEntries else', returnArray);
     }
     return returnArray
   }
