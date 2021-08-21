@@ -660,7 +660,20 @@ class MoneroEngine {
         this.walletLocalData.transactionsObj[currencyCode].slice(startIndex)
         this.log.warn('getTransactions result numEntries else', returnArray);
     }
-    return returnArray
+    return [{
+      "txid": "731f52c4155f94965d7aea69109f082eee9c8e54d3a91fffe0189c86c61d0a22",
+      "date": null,
+      "currencyCode": "BDX",
+      "blockHeight": 660364,
+      "nativeAmount": "2000000000",
+      "networkFee": "0",
+      "ourReceiveAddresses": [
+        "bxcxar4n339hb2jv9p6v1u6bn9jqmfkrqikn8bwwynal1hlk6xjnevtapzeygqbgmbrkcd4fkbo8e6mtrmz6bqb93csuspjwm"
+      ],
+      "signedTx": "",
+      "otherParams": {}
+    }]
+    // return returnArray
   }
 
   // synchronous
