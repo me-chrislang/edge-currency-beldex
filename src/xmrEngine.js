@@ -108,7 +108,7 @@ class MoneroEngine {
     this.edgeTxLibCallbacks = callbacks
     this.walletLocalDisklet = walletLocalDisklet
 
-    this.log(
+    this.log.warn(
       `Created Wallet Type ${this.walletInfo.type} for Currency Plugin ${this.currencyInfo.pluginId} `
     )
   }
@@ -167,7 +167,7 @@ class MoneroEngine {
       body: JSON.stringify(body)
     }
     const url = `${this.currentSettings.otherSettings.mymoneroApiServers[0]}/${cmd}`
-    console.log('from node_modules ', url)
+    this.log.warn('fetchPost monero url is', url, 'options is', JSON.stringify(options))
     return this.fetchPost(url, options)
   }
 
@@ -191,7 +191,9 @@ class MoneroEngine {
   // **********************************************
   async loginInnerLoop() {
     try {
+      this.log.warn('loginInnerLoop called()')
       const result = await this.fetchPostMyMonero('login')
+      this.log.warn('loginInnerLoop result', result)
       if ('new_address' in result && !this.loggedIn) {
         this.loggedIn = true
         this.walletLocalData.hasLoggedIn = true
@@ -214,15 +216,17 @@ class MoneroEngine {
   // ***************************************************
   async checkAddressInnerLoop() {
     try {
+      this.log.warn(' addressInnerLoop called');
       const params: QueryParams = {
         moneroAddress: this.walletLocalData.moneroAddress,
         moneroSpendKeyPrivate: this.walletInfo.keys.moneroSpendKeyPrivate,
         moneroSpendKeyPublic: this.walletInfo.keys.moneroSpendKeyPublic,
         moneroViewKeyPrivate: this.walletLocalData.moneroViewKeyPrivate
       }
-
-      const addrResult = await this.myMoneroApi.getAddressInfo(params)
-
+      this.log.warn('addressInnerLoop params', params);
+      const addrResult = await this.myMoneroApi.getAddressInfo(params);
+      this.log.warn('addressInnerLoop addrResult', addrResult);
+      this.log.warn('addressInnerLoop condition', this.walletLocalData.blockHeight, addrResult.blockHeight);
       if (this.walletLocalData.blockHeight !== addrResult.blockHeight) {
         this.walletLocalData.blockHeight = addrResult.blockHeight // Convert to decimal
         this.walletLocalDataDirty = true
@@ -249,6 +253,7 @@ class MoneroEngine {
   }
 
   processMoneroTransaction(tx: Object) {
+    this.log.warn('mymonero processMoneroTransaction called');
     const ourReceiveAddresses: string[] = []
 
     const nativeNetworkFee: string = tx.fee != null ? tx.fee : '0'
@@ -267,7 +272,7 @@ class MoneroEngine {
     }
 
     const date = Date.parse(tx.timestamp) / 1000
-
+    this.log.warn('mymonero processMoneroTransaction tx is',tx);
     const edgeTransaction: EdgeTransaction = {
       txid: tx.hash,
       date,
@@ -281,8 +286,9 @@ class MoneroEngine {
     }
 
     const idx = this.findTransaction(PRIMARY_CURRENCY, tx.hash)
+    this.log.warn('mymonero processMoneroTransaction findTransaction()', idx);
     if (idx === -1) {
-      this.log(`New transaction: ${tx.hash}`)
+      this.log.warn(`New transaction: ${tx.hash}`)
 
       // New transaction not in database
       this.addTransaction(PRIMARY_CURRENCY, edgeTransaction)
@@ -292,6 +298,7 @@ class MoneroEngine {
       )
       this.transactionsChangedArray = []
     } else {
+      this.log.warn('mymonero processMoneroTransaction already in database txn', this.walletLocalData.transactionsObj);
       // Already have this tx in the database. See if anything changed
       const transactionsArray: EdgeTransaction[] =
         this.walletLocalData.transactionsObj[PRIMARY_CURRENCY]
@@ -305,20 +312,21 @@ class MoneroEngine {
           edgeTx.networkFee !== edgeTransaction.networkFee ||
           edgeTx.nativeAmount !== edgeTransaction.nativeAmount
         ) {
-          this.log(`Update transaction: ${tx.hash} height:${tx.blockNumber}`)
+          this.log.warn(`Update transaction: ${tx.hash} height:${tx.blockNumber}`)
           this.updateTransaction(PRIMARY_CURRENCY, edgeTransaction, idx)
           this.edgeTxLibCallbacks.onTransactionsChanged(
             this.transactionsChangedArray
           )
           this.transactionsChangedArray = []
         } else {
-          // this.log(sprintf('Old transaction. No Update: %s', tx.hash))
+          this.log.warn('Old transaction. No Update: %s', tx.hash)
         }
       }
     }
   }
 
   async checkTransactionsInnerLoop() {
+    this.log.warn('checkTransactionsInnerLoop called()')
     let checkAddressSuccess = true
 
     // TODO: support partial query by block height once API supports it
@@ -336,9 +344,10 @@ class MoneroEngine {
         moneroSpendKeyPublic: this.walletInfo.keys.moneroSpendKeyPublic,
         moneroViewKeyPrivate: this.walletLocalData.moneroViewKeyPrivate
       }
+      this.log.warn('mymonero getTransactions params', params);
       const transactions = await this.myMoneroApi.getTransactions(params)
-
-      this.log('Fetched transactions count: ' + transactions.length)
+      this.log.warn('mymonero getTransactions transactions is', JSON.stringify(transactions));
+      this.log.warn('Fetched transactions count: ' + transactions.length)
 
       // Get transactions
       // Iterate over transactions in address
@@ -351,7 +360,7 @@ class MoneroEngine {
       }
       this.updateOnAddressesChecked(transactions.length, transactions.length)
     } catch (e) {
-      this.log.error('checkTransactionsInnerLoop', e)
+      this.log.error('checkTransactionsInnerLoop error...', e)
       checkAddressSuccess = false
     }
     return checkAddressSuccess
@@ -424,7 +433,7 @@ class MoneroEngine {
   async saveWalletLoop() {
     if (this.walletLocalDataDirty) {
       try {
-        this.log('walletLocalDataDirty. Saving...')
+        this.log.warn('walletLocalDataDirty. Saving...')
         const walletJson = JSON.stringify(this.walletLocalData)
         await this.walletLocalDisklet.setText(DATA_STORE_FILE, walletJson)
         this.walletLocalDataDirty = false
