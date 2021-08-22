@@ -200,7 +200,8 @@ class MoneroEngine {
       this.log.warn('loginInnerLoop result', result)
       if ('new_address' in result && !this.loggedIn) {
         this.loggedIn = true
-        this.walletLocalData.hasLoggedIn = true
+        this.walletLocalData.hasLoggedIn = true;
+        this.log.warn('loginInnerLoop inside login', this.walletLocalData)
         clearTimeout(this.timers.loginInnerLoop)
         delete this.timers.loginInnerLoop
         this.addToLoop('checkAddressInnerLoop', ADDRESS_POLL_MILLISECONDS)
@@ -307,7 +308,7 @@ class MoneroEngine {
       const transactionsArray: EdgeTransaction[] =
         this.walletLocalData.transactionsObj[PRIMARY_CURRENCY]
       const edgeTx = transactionsArray[idx]
-
+      this.log.warn('mymonero processMoneroTransaction already in database txn edgeTx', edgeTx);
       if (edgeTransaction.blockHeight) {
         // Only update old transactions if the incoming tx is confirmed
         // Unconfirmed txs will sometimes have incorrect values
@@ -348,9 +349,9 @@ class MoneroEngine {
         moneroSpendKeyPublic: this.walletInfo.keys.moneroSpendKeyPublic,
         moneroViewKeyPrivate: this.walletLocalData.moneroViewKeyPrivate
       }
-      this.log.warn('mymonero getTransactions params', params);
+      this.log.warn('mymonero transaction params', params);
       const transactions = await this.myMoneroApi.getTransactions(params)
-      this.log.warn('mymonero getTransactions transactions is', JSON.stringify(transactions));
+      this.log.warn('mymonero transactions is', JSON.stringify(transactions));
       this.log.warn('Fetched transactions count: ' + transactions.length)
 
       // Get transactions
@@ -605,7 +606,7 @@ class MoneroEngine {
   }
 
   // asynchronous
-  async getTransactionsBDX(options: any): Promise<EdgeTransaction[]> {
+  async getTransactions(options: any): Promise<EdgeTransaction[]> {
     let currencyCode: string = PRIMARY_CURRENCY
     this.log.warn('getTransactions');
     const valid: boolean = validateObject(options, {
@@ -652,7 +653,7 @@ class MoneroEngine {
     }
 
     // Copy the appropriate entries from the arrayTransactions
-    let returnArray = []
+    let returnArray = [{name: 'default', currencyCode: 'BDX', blockHeight: 55555}]
 
     if (numEntries) {
       returnArray = this.walletLocalData.transactionsObj[currencyCode].slice(
@@ -662,24 +663,10 @@ class MoneroEngine {
       this.log.warn('getTransactions result numEntries', returnArray);
     } else {
       returnArray =
-        this.walletLocalData.transactionsObj[currencyCode].slice(startIndex)
+       await this.walletLocalData.transactionsObj[currencyCode].slice(startIndex)
         this.log.warn('getTransactions result numEntries else', returnArray);
     }
-    return [{
-      "txid": "731f52c4155f94965d7aea69109f082eee9c8e54d3a91fffe0189c86c61d0a22",
-      "date": null,
-      "currencyCode": "BDX",
-      "blockHeight": 660364,
-      "nativeAmount": "2000000000",
-      "networkFee": "0",
-      "ourReceiveAddresses": [
-        "bxcxar4n339hb2jv9p6v1u6bn9jqmfkrqikn8bwwynal1hlk6xjnevtapzeygqbgmbrkcd4fkbo8e6mtrmz6bqb93csuspjwm"
-      ],
-      "signedTx": "",
-      "otherParams": {},
-      "test_key": "100"
-    }]
-    // return returnArray
+    return returnArray
   }
 
   // synchronous
