@@ -605,7 +605,7 @@ class MoneroEngine {
   }
 
   // asynchronous
-  async getTransactions(options: any): Promise<EdgeTransaction[]> {
+  async getTransactionsBDX(options: any): Promise<EdgeTransaction[]> {
     let currencyCode: string = PRIMARY_CURRENCY
     this.log.warn('getTransactions');
     const valid: boolean = validateObject(options, {
