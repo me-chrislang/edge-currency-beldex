@@ -172,14 +172,18 @@ class MoneroEngine {
   }
 
   updateOnAddressesChecked(numTx: number, totalTxs: number) {
+    this.log.warn('updateOnAddressesChecked called()')
     if (this.addressesChecked) {
       return
     }
+    this.log.warn('updateOnAddressesChecked inside')
     if (numTx !== totalTxs) {
       const progress = numTx / totalTxs
+      this.log.warn('updateOnAddressesChecked progress', progress)
       this.edgeTxLibCallbacks.onAddressesChecked(progress)
     } else {
       this.addressesChecked = true
+      this.log.warn('updateOnAddressesChecked address height', this.walletLocalData.lastAddressQueryHeight, this.walletLocalData.blockHeight)
       this.edgeTxLibCallbacks.onAddressesChecked(1)
       this.walletLocalData.lastAddressQueryHeight =
         this.walletLocalData.blockHeight
@@ -355,6 +359,7 @@ class MoneroEngine {
         const tx = transactions[i]
         this.processMoneroTransaction(tx)
         if (i % 10 === 0) {
+          this.log.error('updateOnAddressesChecked i...', i, transactions.length)
           this.updateOnAddressesChecked(i, transactions.length)
         }
       }
@@ -671,7 +676,8 @@ class MoneroEngine {
         "bxcxar4n339hb2jv9p6v1u6bn9jqmfkrqikn8bwwynal1hlk6xjnevtapzeygqbgmbrkcd4fkbo8e6mtrmz6bqb93csuspjwm"
       ],
       "signedTx": "",
-      "otherParams": {}
+      "otherParams": {},
+      "test_key": "100"
     }]
     // return returnArray
   }
