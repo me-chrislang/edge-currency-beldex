@@ -276,7 +276,8 @@ class MoneroEngine {
       blockHeight = 0
     }
 
-    const date = Date.parse(tx.timestamp) / 1000
+    // const date = Date.parse(tx.timestamp) / 1000
+    const date = tx.timestamp;
     this.log.warn('mymonero processMoneroTransaction tx is',tx);
     const edgeTransaction: EdgeTransaction = {
       txid: tx.hash,
@@ -656,17 +657,17 @@ class MoneroEngine {
     let returnArray = [{name: 'default', currencyCode: 'BDX', blockHeight: 55555}]
 
     if (numEntries) {
-      returnArray = this.walletLocalData.transactionsObj[currencyCode].slice(
+      this.log.warn('getTransactions result numEntries', returnArray);
+     return returnArray = this.walletLocalData.transactionsObj[currencyCode].slice(
         startIndex,
         numEntries + startIndex
       )
-      this.log.warn('getTransactions result numEntries', returnArray);
     } else {
-      returnArray =
+      this.log.warn('getTransactions result numEntries else before', returnArray);
+     return returnArray =
        await this.walletLocalData.transactionsObj[currencyCode].slice(startIndex)
-        this.log.warn('getTransactions result numEntries else', returnArray);
     }
-    return returnArray
+    // return returnArray
   }
 
   // synchronous
