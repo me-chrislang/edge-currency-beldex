@@ -1,5 +1,5 @@
-import { callMyMonero } from 'native-beldex-core'
+import { callBeldex } from 'native-beldex-core'
 
 export default function makeCustomIo() {
-  return { callMyMonero }
+  return { callBeldex }
 }

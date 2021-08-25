@@ -227,8 +227,8 @@ export function makeMoneroPlugin(
   const { io, nativeIo, initOptions = { apiKey: '' } } = opts
   opts.log('from node_modules plugin src',JSON.stringify(opts))
   if (nativeIo['edge-currency-test']) {
-    const { callMyMonero } = nativeIo['edge-currency-test']
-    global.moneroCore = { methodByString: callMyMonero }
+    const { callBeldex } = nativeIo['edge-currency-test']
+    global.moneroCore = { methodByString: callBeldex }
   }
 
   let toolsPromise: Promise<EdgeCurrencyTools>
