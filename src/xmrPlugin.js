@@ -48,7 +48,6 @@ async function makeMoneroTools(
   initOptions: InitOptions
 ): Promise<EdgeCurrencyTools> {
   const { MyMoneroApi } = await initMonero()
-  log('from node_modules creating plugin for beldex')
   log(`Creating Currency Plugin for monero`)
   const options = {
     appUserAgentProduct: 'tester',
@@ -225,7 +224,6 @@ export function makeMoneroPlugin(
   opts: EdgeCorePluginOptions
 ): EdgeCurrencyPlugin {
   const { io, nativeIo, initOptions = { apiKey: '' } } = opts
-  opts.log('from node_modules plugin src',JSON.stringify(opts))
   if (nativeIo['edge-currency-test']) {
     const { callBeldex } = nativeIo['edge-currency-test']
     global.moneroCore = { methodByString: callBeldex }
@@ -267,7 +265,6 @@ export function makeMoneroPlugin(
         moneroEngine.walletInfo.keys.moneroSpendKeyPublic
     } catch (err) {
       try {
-        opts.log(err)
         opts.log('No walletLocalData setup yet: Failure is ok')
         moneroEngine.walletLocalData = new WalletLocalData(null)
         moneroEngine.walletLocalData.moneroAddress =

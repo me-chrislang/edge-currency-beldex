@@ -4,7 +4,6 @@ import 'regenerator-runtime/runtime'
 
 import { makeMoneroPlugin } from './xmrPlugin.js'
 
-console.log('from node_modules in initial call beldex src')
 const edgeCorePlugins = {
   beldex: makeMoneroPlugin
 }

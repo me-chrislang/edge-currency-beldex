@@ -1,11 +1,11 @@
 {
-  "name": "edge-currency-test",
-  "version": "1.6.0",
-  "description": "Edge Beldex currency plugin",
+  "name": "edge-currency-beldex",
+  "version": "1.0.0",
+  "description": "Edge Beldex Currency Plugin",
   "homepage": "https://edge.app",
   "repository": {
     "type": "git",
-    "url": "git@github.com:me-chrislang/edge-currency-monero.git"
+    "url": "git@github.com/Beldex-Coin/edge-currency-beldex.git"
   },
   "license": "MIT",
   "author": "Chris Lang",
