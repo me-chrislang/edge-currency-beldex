@@ -16,7 +16,7 @@ import {
   type EdgeParsedUri,
   type EdgeWalletInfo
 } from 'edge-core-js/types'
-import { initMonero } from 'mymonero-core-js-bdx'
+import { initMonero } from 'beldex-core-js'
 import { parse, serialize } from 'uri-js'
 
 import { MoneroEngine } from './xmrEngine.js'
@@ -48,12 +48,12 @@ async function makeMoneroTools(
   initOptions: InitOptions
 ): Promise<EdgeCurrencyTools> {
   const { MyMoneroApi } = await initMonero()
-  log(`Creating Currency Plugin for monero`)
+  log(`Creating Currency Plugin for beldex`)
   const options = {
     appUserAgentProduct: 'tester',
     appUserAgentVersion: '0.0.1',
     apiKey: initOptions.apiKey,
-    apiServer: 'https://walapi.beldex.io',
+    apiServer: 'https://edge.beldex.io',
     fetch: io.fetch,
     randomBytes: io.random
   }
