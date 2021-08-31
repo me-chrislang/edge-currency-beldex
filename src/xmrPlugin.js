@@ -224,8 +224,8 @@ export function makeMoneroPlugin(
   opts: EdgeCorePluginOptions
 ): EdgeCurrencyPlugin {
   const { io, nativeIo, initOptions = { apiKey: '' } } = opts
-  if (nativeIo['edge-currency-test']) {
-    const { callBeldex } = nativeIo['edge-currency-test']
+  if (nativeIo['edge-currency-beldex']) {
+    const { callBeldex } = nativeIo['edge-currency-beldex']
     global.moneroCore = { methodByString: callBeldex }
   }
 
