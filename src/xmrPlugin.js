@@ -42,7 +42,7 @@ function getParameterByName(param, url) {
   return decodeURIComponent(results[2].replace(/\+/g, ' '))
 }
 
-async function makeMoneroTools(
+async function makeBeldexTools(
   io: EdgeIo,
   log: EdgeLog,
   initOptions: InitOptions
@@ -220,7 +220,7 @@ async function makeMoneroTools(
   return moneroPlugin
 }
 
-export function makeMoneroPlugin(
+export function makeBeldexPlugin(
   opts: EdgeCorePluginOptions
 ): EdgeCurrencyPlugin {
   const { io, nativeIo, initOptions = { apiKey: '' } } = opts
@@ -232,7 +232,7 @@ export function makeMoneroPlugin(
   let toolsPromise: Promise<EdgeCurrencyTools>
   function makeCurrencyTools(): Promise<EdgeCurrencyTools> {
     if (toolsPromise != null) return toolsPromise
-    toolsPromise = makeMoneroTools(io, opts.log, initOptions)
+    toolsPromise = makeBeldexTools(io, opts.log, initOptions)
     return toolsPromise
   }
 
