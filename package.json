@@ -1,6 +1,6 @@
 {
   "name": "edge-currency-beldex",
-  "version": "1.1.8",
+  "version": "1.2.6",
   "description": "Edge Beldex Currency Plugin",
   "homepage": "https://edge.app",
   "repository": {
@@ -42,7 +42,6 @@
     "biggystring": "^3.0.0",
     "buffer": "^5.0.6",
     "jsonschema": "^1.1.1",
-    "mymonero-core-js": "git://github.com/EdgeApp/mymonero-core-js.git#matthew/txPrivateKey",
     "beldex-core-js":"git://github.com/Beldex-Coin/beldex-core-js.git#beldex-edge-integration",
     "uri-js": "^3.0.2"
   },
