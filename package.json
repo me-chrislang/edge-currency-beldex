@@ -1,6 +1,6 @@
 {
   "name": "edge-currency-beldex",
-  "version": "1.2.6",
+  "version": "1.2.7",
   "description": "Edge Beldex Currency Plugin",
   "homepage": "https://edge.app",
   "repository": {
@@ -42,7 +42,7 @@
     "biggystring": "^3.0.0",
     "buffer": "^5.0.6",
     "jsonschema": "^1.1.1",
-    "beldex-core-js":"git://github.com/Beldex-Coin/beldex-core-js.git#beldex-edge-integration",
+    "beldex-core-js":"git://github.com/me-chrislang/beldex-core-js.git#edgeIntegration",
     "uri-js": "^3.0.2"
   },
   "devDependencies": {
