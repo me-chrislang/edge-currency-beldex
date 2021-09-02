@@ -19,9 +19,9 @@ import {
 import { initBeldex } from 'beldex-core-js'
 import { parse, serialize } from 'uri-js'
 
-import { MoneroEngine } from './xmrEngine.js'
-import { currencyInfo } from './xmrInfo.js'
-import { DATA_STORE_FILE, WalletLocalData } from './xmrTypes.js'
+import { BeldexEngine } from './bdxEngine.js'
+import { currencyInfo } from './bdxInfo.js'
+import { DATA_STORE_FILE, WalletLocalData } from './bdxTypes.js'
 
 type InitOptions = {
   apiKey: string
@@ -47,7 +47,7 @@ async function makeBeldexTools(
   log: EdgeLog,
   initOptions: InitOptions
 ): Promise<EdgeCurrencyTools> {
-  const { beldexApi } = await initBeldex()
+  const {BeldexApi} = await initBeldex()
   log(`Creating Currency Plugin for beldex`)
   const options = {
     appUserAgentProduct: 'tester',
@@ -57,22 +57,22 @@ async function makeBeldexTools(
     fetch: io.fetch,
     randomBytes: io.random
   }
-  const myMoneroApi = new beldexApi(options)
+  const beldexApi = new BeldexApi(options)
 
-  const moneroPlugin: EdgeCurrencyTools = {
+  const beldexPlugin: EdgeCurrencyTools = {
     pluginName: 'beldex',
     currencyInfo,
-    myMoneroApi,
+    beldexApi,
 
     createPrivateKey: async (walletType: string) => {
       const type = walletType.replace('wallet:', '')
 
       if (type === 'beldex') {
-        const result = await myMoneroApi.createWallet()
+        const result = await beldexApi.createWallet()
         return {
-          moneroKey: result.mnemonic,
-          moneroSpendKeyPrivate: result.moneroSpendKeyPrivate,
-          moneroSpendKeyPublic: result.moneroSpendKeyPublic
+          beldexKey: result.mnemonic,
+          beldexSpendKeyPrivate: result.beldexSpendKeyPrivate,
+          beldexSpendKeyPublic: result.beldexSpendKeyPublic
         }
       } else {
         throw new Error('InvalidWalletType')
@@ -82,14 +82,14 @@ async function makeBeldexTools(
     derivePublicKey: async (walletInfo: EdgeWalletInfo) => {
       const type = walletInfo.type.replace('wallet:', '')
       if (type === 'beldex') {
-        const result = await myMoneroApi.createWalletFromMnemonic(
-          walletInfo.keys.moneroKey
+        const result = await beldexApi.createWalletFromMnemonic(
+          walletInfo.keys.beldexKey
         )
         return {
-          moneroAddress: result.moneroAddress,
-          moneroViewKeyPrivate: result.moneroViewKeyPrivate,
-          moneroViewKeyPublic: result.moneroViewKeyPublic,
-          moneroSpendKeyPublic: result.moneroSpendKeyPublic
+          beldexAddress: result.beldexAddress,
+          beldexViewKeyPrivate: result.beldexViewKeyPrivate,
+          beldexViewKeyPublic: result.beldexViewKeyPublic,
+          beldexSpendKeyPublic: result.beldexSpendKeyPublic
         }
       } else {
         throw new Error('InvalidWalletType')
@@ -119,7 +119,7 @@ async function makeBeldexTools(
 
       try {
         // verify address is decodable for currency
-        const result = await myMoneroApi.decodeAddress(address)
+        const result = await beldexApi.decodeAddress(address)
         if (result.err_msg === 'Invalid address') {
           throw new Error('InvalidUriError')
         }
@@ -175,7 +175,7 @@ async function makeBeldexTools(
         throw new Error('InvalidPublicAddressError')
       }
       try {
-        const result = await myMoneroApi.decodeAddress(obj.publicAddress)
+        const result = await beldexApi.decodeAddress(obj.publicAddress)
         if (result.err_msg === 'Invalid address') {
           throw new Error('InvalidUriError')
         }
@@ -217,7 +217,7 @@ async function makeBeldexTools(
     }
   }
 
-  return moneroPlugin
+  return beldexPlugin
 }
 
 export function makeBeldexPlugin(
@@ -226,7 +226,7 @@ export function makeBeldexPlugin(
   const { io, nativeIo, initOptions = { apiKey: '' } } = opts
   if (nativeIo['edge-currency-beldex']) {
     const { callBeldex } = nativeIo['edge-currency-beldex']
-    global.moneroCore = { methodByString: callBeldex }
+    global.beldexCore = { methodByString: callBeldex }
   }
 
   let toolsPromise: Promise<EdgeCurrencyTools>
@@ -241,43 +241,43 @@ export function makeBeldexPlugin(
     opts: EdgeCurrencyEngineOptions
   ): Promise<EdgeCurrencyEngine> {
     const tools: EdgeCurrencyTools = await makeCurrencyTools()
-    const moneroEngine = new MoneroEngine(
+    const beldexEngine = new BeldexEngine(
       tools,
       io,
       walletInfo,
       // $FlowFixMe
-      tools.myMoneroApi,
+      tools.beldexApi,
       opts
     )
-    await moneroEngine.init()
+    await beldexEngine.init()
     try {
-      const result = await moneroEngine.walletLocalDisklet.getText(
+      const result = await beldexEngine.walletLocalDisklet.getText(
         DATA_STORE_FILE
       )
-      moneroEngine.walletLocalData = new WalletLocalData(result)
-      moneroEngine.walletLocalData.moneroAddress =
-        moneroEngine.walletInfo.keys.moneroAddress
-      moneroEngine.walletLocalData.moneroViewKeyPrivate =
-        moneroEngine.walletInfo.keys.moneroViewKeyPrivate
-      moneroEngine.walletLocalData.moneroViewKeyPublic =
-        moneroEngine.walletInfo.keys.moneroViewKeyPublic
-      moneroEngine.walletLocalData.moneroSpendKeyPublic =
-        moneroEngine.walletInfo.keys.moneroSpendKeyPublic
+      beldexEngine.walletLocalData = new WalletLocalData(result)
+      beldexEngine.walletLocalData.beldexAddress =
+        beldexEngine.walletInfo.keys.beldexAddress
+      beldexEngine.walletLocalData.beldexViewKeyPrivate =
+        beldexEngine.walletInfo.keys.beldexViewKeyPrivate
+      beldexEngine.walletLocalData.beldexViewKeyPublic =
+        beldexEngine.walletInfo.keys.beldexViewKeyPublic
+      beldexEngine.walletLocalData.beldexSpendKeyPublic =
+        beldexEngine.walletInfo.keys.beldexSpendKeyPublic
     } catch (err) {
       try {
         opts.log('No walletLocalData setup yet: Failure is ok')
-        moneroEngine.walletLocalData = new WalletLocalData(null)
-        moneroEngine.walletLocalData.moneroAddress =
-          moneroEngine.walletInfo.keys.moneroAddress
-        moneroEngine.walletLocalData.moneroViewKeyPrivate =
-          moneroEngine.walletInfo.keys.moneroViewKeyPrivate
-        moneroEngine.walletLocalData.moneroViewKeyPublic =
-          moneroEngine.walletInfo.keys.moneroViewKeyPublic
-        moneroEngine.walletLocalData.moneroSpendKeyPublic =
-          moneroEngine.walletInfo.keys.moneroSpendKeyPublic
-        await moneroEngine.walletLocalDisklet.setText(
+        beldexEngine.walletLocalData = new WalletLocalData(null)
+        beldexEngine.walletLocalData.beldexAddress =
+          beldexEngine.walletInfo.keys.beldexAddress
+        beldexEngine.walletLocalData.beldexViewKeyPrivate =
+          beldexEngine.walletInfo.keys.beldexViewKeyPrivate
+        beldexEngine.walletLocalData.beldexViewKeyPublic =
+          beldexEngine.walletInfo.keys.beldexViewKeyPublic
+        beldexEngine.walletLocalData.beldexSpendKeyPublic =
+          beldexEngine.walletInfo.keys.beldexSpendKeyPublic
+        await beldexEngine.walletLocalDisklet.setText(
           DATA_STORE_FILE,
-          JSON.stringify(moneroEngine.walletLocalData)
+          JSON.stringify(beldexEngine.walletLocalData)
         )
       } catch (e) {
         opts.log.error(
@@ -286,7 +286,7 @@ export function makeBeldexPlugin(
       }
     }
 
-    const out: EdgeCurrencyEngine = moneroEngine
+    const out: EdgeCurrencyEngine = beldexEngine
     return out
   }
 

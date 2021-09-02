@@ -2,7 +2,7 @@
 
 import 'regenerator-runtime/runtime'
 
-import { makeBeldexPlugin } from './xmrPlugin.js'
+import { makeBeldexPlugin } from './bdxPlugin.js'
 
 const edgeCorePlugins = {
   beldex: makeBeldexPlugin

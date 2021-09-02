@@ -9,7 +9,7 @@ const babelOptions = {
 
 module.exports = {
   devtool: 'source-map',
-  entry: './src/xmrIndex.js',
+  entry: './src/bdxIndex.js',
   mode: 'development',
   target: 'node',
   module: {
@@ -21,7 +21,7 @@ module.exports = {
     ]
   },
   output: {
-    filename: 'edge-currency-monero.js',
+    filename: 'edge-currency-beldex.js',
     path: path.join(path.resolve(__dirname), 'lib/react-native')
   },
   resolve: {

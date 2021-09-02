@@ -10,7 +10,7 @@
   "license": "MIT",
   "author": "Chris Lang",
   "main": "./index.js",
-  "module": "./lib/xmrIndex.js",
+  "module": "./lib/bdxIndex.js",
   "files": [
     "CHANGELOG.md",
     "index.js",
@@ -42,7 +42,7 @@
     "biggystring": "^3.0.0",
     "buffer": "^5.0.6",
     "jsonschema": "^1.1.1",
-    "beldex-core-js":"git://github.com/me-chrislang/beldex-core-js.git#edgeIntegration",
+    "beldex-core-js": "github:me-chrislang/beldex-core-js#edgeIntegration",
     "uri-js": "^3.0.2"
   },
   "devDependencies": {
@@ -54,6 +54,7 @@
     "babel-loader": "^8.0.5",
     "chai": "^4.1.2",
     "edge-core-js": "^0.17.33",
+    "electron": "^14.0.0",
     "eslint": "^7.14.0",
     "eslint-config-standard-kit": "0.15.1",
     "eslint-plugin-flowtype": "^5.2.0",
@@ -75,7 +76,7 @@
     "webpack-cli": "^3.2.3"
   },
   "peerDependencies": {
-    "react-native-beldex-core":"1.0.4"
+    "react-native-beldex-core": "1.0.4"
   },
-  "react-native": "./lib/xmrIndex.js"
+  "react-native": "./lib/bdxIndex.js"
 }
