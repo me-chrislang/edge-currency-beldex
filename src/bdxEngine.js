@@ -25,7 +25,7 @@ import {
 import type {
   QueryParams,
   SendFundsParams
-} from 'beldex-core-js/lib/beldexApi.js'
+} from 'beldex-core-js-edge/lib/beldexApi.js'
 
 import {
   cleanResultLogs,

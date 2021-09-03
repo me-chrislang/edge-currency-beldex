@@ -16,7 +16,7 @@ import {
   type EdgeParsedUri,
   type EdgeWalletInfo
 } from 'edge-core-js/types'
-import { initBeldex } from 'beldex-core-js'
+import { initBeldex } from 'beldex-core-js-edge'
 import { parse, serialize } from 'uri-js'
 
 import { BeldexEngine } from './bdxEngine.js'
