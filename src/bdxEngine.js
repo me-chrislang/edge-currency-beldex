@@ -167,6 +167,9 @@ class BeldexEngine {
       body: JSON.stringify(body)
     }
     const url = `${this.currentSettings.otherSettings.beldexApiServers[0]}/${cmd}`
+    this.log.warn('bdx url is', url)
+    this.log.warn('bdx walletLocalData is', JSON.stringify(this.walletLocalData))
+    this.log.warn('bdx walletInfo is', JSON.stringify(this.walletInfo))
     return this.fetchPost(url, options)
   }
 
@@ -524,6 +527,7 @@ class BeldexEngine {
 
   // synchronous
   getBalance(options: any): string {
+    this.log.warn('getBalance called()')
     let currencyCode = PRIMARY_CURRENCY
     if (typeof options !== 'undefined') {
       const valid = validateObject(options, {
@@ -543,12 +547,14 @@ class BeldexEngine {
       return '0'
     } else {
       const nativeBalance = this.walletLocalData.totalBalances[currencyCode];
+      this.log.warn('getBalance result()', nativeBalance)
       return nativeBalance
     }
   }
 
   // synchronous
   getNumTransactions(options: any): number {
+    this.log.warn('getNumTransactions called()')
     let currencyCode = PRIMARY_CURRENCY
     const valid = validateObject(options, {
       type: 'object',
@@ -565,12 +571,14 @@ class BeldexEngine {
     ) {
       return 0
     } else {
+      this.log.warn('getNumTransactions result()', this.walletLocalData.transactionsObj[currencyCode])
       return this.walletLocalData.transactionsObj[currencyCode].length
     }
   }
 
   // asynchronous
   async getTransactions(options: any): Promise<EdgeTransaction[]> {
+    this.log.warn('getTransactions called()')
     let currencyCode: string = PRIMARY_CURRENCY
     const valid: boolean = validateObject(options, {
       type: 'object',
@@ -625,6 +633,7 @@ class BeldexEngine {
       returnArray =
         await this.walletLocalData.transactionsObj[currencyCode].slice(startIndex)
     }
+    this.log.warn('getTransactions result()', returnArray)
     return returnArray
   }
 
