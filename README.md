@@ -49,4 +49,4 @@ BSD 3
 [travis-image]: https://travis-ci.org/Airbitz/edge-currency-ethereum.svg?branch=master
 [travis-url]: https://travis-ci.org/Airbitz/edge-currency-ethereum
 [daviddm-image]: https://david-dm.org/Airbitz/edge-currency-ethereum.svg?theme=shields.io
-[daviddm-url]: https://david-dm.org/Airbitz/edge-currency-ethereum
+[daviddm-url]: https://david-dm.org/Airbitz/edge-currency-ethereum.
